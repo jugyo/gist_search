@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+abort "Usage: #{$0} USER_NAME PAGE_COUNT" unless ARGV.size == 2
+
+username, page_count = *ARGV
+page_count = Integer(page_count) rescue 1
+
+require File.expand_path('../../env', __FILE__)
+
+Indexer.fetch(username, page_count)

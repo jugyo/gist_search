@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+abort "Usage: #{$0} USERNAME KEYWORD" unless ARGV.size == 2
+
+username, keyword = *ARGV
+
+require File.expand_path('../../env', __FILE__)
+require 'colored'
+
+Gist.search(username, keyword).each do |index|
+  gist = index.key
+  puts "https://gist.github.com/#{gist.key}".underline.magenta
+  gist.content.each_line do |line|
+    regexp = /#{Regexp.quote(keyword)}/i
+    if line =~ regexp
+      puts '  | ' + line.gsub(regexp) {|i| i.on_green}
+    end
+  end
+  puts
+end

@@ -1,0 +1,2 @@
+db:
+  path: 'db/gist_search.db'

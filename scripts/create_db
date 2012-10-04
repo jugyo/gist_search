@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require File.expand_path('../../env', __FILE__)
+
+FileUtils.mkdir_p(File.dirname(CONFIG['db']['path']))
+Groonga::Context.default_options = {:encoding => :utf8}
+Groonga::Database.create(path: CONFIG['db']['path'])
+
+# key is gist_id
+Groonga::Schema.create_table("Gists", :type => :hash) do |table|
+  table.short_text 'user_name'
+  table.text "content"
+end
+
+Groonga::Schema.create_table("Terms",
+  type: :patricia_trie,
+  key_normalize: true,
+  default_tokenizer: "TokenBigram"
+) do |table|
+  table.index "Gists.content"
+end
+
+puts "DB has been created."
